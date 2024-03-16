@@ -1,8 +1,13 @@
-import React from 'react'
+import React from 'react';
+import "../styles/canvas.scss";
 
 const Canvas = () => {
   return (
-    <div>Canvas</div>
+    <div className='canvas'>
+      <canvas height={600} width={800}>
+
+      </canvas>
+    </div>
   )
 }
 
