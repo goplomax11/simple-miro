@@ -1,28 +1,17 @@
 import React from "react";
+import "../styles/toolBar.scss";
 
 const ToolBar = () => {
   return (
     <div className="tool-bar">
-        <div className="tool-bar-left">
-            <div className="tool-bar-left-item">
-                <div className="tool-bar-left-item-icon">
-                    <i className="fas fa-bars"></i>
-                </div>
-                <div className="tool-bar-left-item-text">
-                    <span>Menu</span>
-                </div>
-            </div>
-        </div>
-        <div className="tool-bar-right">
-            <div className="tool-bar-right-item">
-                <div className="tool-bar-right-item-icon">
-                    <i className="fas fa-user"></i>
-                </div>
-                <div className="tool-bar-right-item-text">
-                    <span>User</span>
-                </div>
-            </div>
-        </div>
+      <button className="tool-bar__btn brush" />
+      <button className="tool-bar__btn rect" />
+      <button className="tool-bar__btn circle" />
+      <button className="tool-bar__btn eraser" />
+      <button type="color" />
+      <button className="tool-bar__btn undo" />
+      <button className="tool-bar__btn redo" />
+      <button className="tool-bar__btn save" />
     </div>
   );
 };
