@@ -1,9 +1,15 @@
 
-import './App.css';
+import SettingBar from "./components/SettingBar";
+import ToolBar from "./components/ToolBar";
+import Canvas from "./components/Canvas";
+import "./styles/app.scss";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
+    <div className="app">
+      <ToolBar />
+      <SettingBar />
+      <Canvas />
     </div>
   );
 }
