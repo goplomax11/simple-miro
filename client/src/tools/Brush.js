@@ -18,11 +18,12 @@ export default class Brush extends Tool {
     mouseDownHandler(e) {
         this.mouseDown = true;
         this.ctx.beginPath();
-        this.ctx.moveTo(e.pageX - e.target.offSetLeft, e.pageY - e.target.offSetTop)
+        this.ctx.moveTo(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
     }
     mouseMoveHandler(e) {
         if(this.mouseDown) {
-            this.draw(e.pageX - e.target.offSetLeft, e.pageY - e.target.offSetTop);
+            this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop);
+            console.log(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
         }
     }
 
