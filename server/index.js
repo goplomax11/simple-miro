@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 app.ws("/", (ws, req) => {
     ws.on("message", (msg) => {
         msg = JSON.parse(msg);
-        switch(msg.message) {
+        switch(msg.method) {
             case "connection":
                 connectionHandler(ws, msg);
                 break
@@ -26,9 +26,12 @@ const connectionHandler = (ws, msg) => {
 }
 
 const broadcastConnection = (ws, msg) => {
+    console.log(msg)
     aWss.clients.forEach(client => {
+
+        console.log(client)
         if(client.id === msg.id) {
-            client.send(`User ${msg.nickname} is connected`)
+            client.send(`User ${msg.username} is connected`)
         }
     })
 }
