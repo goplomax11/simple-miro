@@ -49,6 +49,10 @@ const Canvas = observer(() => {
           method: "connection"
         }))
       }
+
+      socket.onmessage = (event) => {
+        console.log(event.data)
+      }
     }
   }, [canvasState.username]);
 
@@ -57,7 +61,7 @@ const Canvas = observer(() => {
   };
 
   const connectHandler = () => {
-    console.log(inputRef.current.value)
+    console.log(inputRef)
     canvasState.setUsername(inputRef.current.value);
     setIsModalOpen(false);
   };
@@ -73,7 +77,7 @@ const Canvas = observer(() => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Enter your username
           </Typography>
-          <Input style={{marginLeft:"auto"}} ref={inputRef} placeholder="Username..." />
+          <Input  inputProps={{ref:inputRef}} placeholder="Username..." />
           <Button onClick={connectHandler}>Sigh-in</Button>
         </Box>
       </Modal>
