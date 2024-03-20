@@ -12,6 +12,9 @@ app.ws("/", (ws, req) => {
             case "connection":
                 connectionHandler(ws, msg);
                 break
+            case "draw":
+                connectionHandler(ws, msg);
+                break
         }
 
     })
@@ -26,12 +29,9 @@ const connectionHandler = (ws, msg) => {
 }
 
 const broadcastConnection = (ws, msg) => {
-    console.log(msg)
     aWss.clients.forEach(client => {
-
-        console.log(client)
         if(client.id === msg.id) {
-            client.send(`User ${msg.username} is connected`)
+            client.send(JSON.stringify(msg))
         }
     })
 }

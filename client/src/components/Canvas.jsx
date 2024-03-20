@@ -33,14 +33,15 @@ const Canvas = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
-    toolState.setTool(new Brush(canvasState.canvas));
   }, []);
 
   useEffect(() => {
     console.log(canvasState.username)
     if(canvasState.username) {
       const socket = new WebSocket("ws://localhost:5000/");
-      console.log(socket)
+      canvasState.setSocket(socket);
+      canvasState.setSessionId(params.id)
+      toolState.setTool(new Brush(canvasState.canvas, socket, params.id));
       socket.onopen = () => {
         console.log("Connected");
         socket.send(JSON.stringify({
@@ -51,10 +52,36 @@ const Canvas = observer(() => {
       }
 
       socket.onmessage = (event) => {
-        console.log(event.data)
+        let msg = JSON.parse(event.data);
+        switch (msg.method) {
+          case "connection":
+            console.log(`User ${msg.username} connected`)
+            break
+          case "draw":
+            drawHandler(msg);
+            break
+        }
       }
     }
   }, [canvasState.username]);
+
+  const drawHandler = (msg) => {
+    const figure = msg.figure;
+    const ctx = canvasRef.current.getContext("2d");
+    console.log(figure);
+    console.log(ctx)
+    switch (figure.type) {
+      case "brush":
+        Brush.draw(ctx, figure.x, figure.y)
+        break;
+        case "finish":
+          ctx.beginPath();
+          break;
+    
+      default:
+        break;
+    }
+  }
 
   const mouseDownHandler = () => {
     canvasState.pushToUndo(canvasRef.current.toDataURL());
