@@ -21,21 +21,18 @@ export default class Brush extends Tool {
         id: this.id,
         figure: {
           type: "finish",
-
         },
       })
     );
   }
+
   mouseDownHandler(e) {
     this.mouseDown = true;
     this.ctx.beginPath();
-    this.ctx.moveTo(
-      e.pageX - e.target.offsetLeft,
-      e.pageY - e.target.offsetTop
-    );
+    this.ctx.moveTo(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop);
   }
-  mouseMoveHandler(e) {
 
+  mouseMoveHandler(e) {
     if (this.mouseDown) {
       this.socket.send(
         JSON.stringify({
@@ -51,7 +48,7 @@ export default class Brush extends Tool {
     }
   }
 
-   static draw(ctx, x, y) {
+  static draw(ctx, x, y) {
     ctx.lineTo(x, y);
     ctx.stroke();
   }

@@ -8,17 +8,16 @@ export default class Tool {
   }
 
   set fillColor(color) {
-    this.ctx.fillColor = color
+    this.ctx.fillColor = color;
   }
 
   set strokeColor(color) {
-    this.ctx.strokeStyle = color
+    this.ctx.strokeStyle = color;
   }
 
   set lineWidth(width) {
-    this.ctx.lineWidth = width
+    this.ctx.lineWidth = width;
   }
-
 
   deleteEvents() {
     this.canvas.onmousemove = null;
@@ -26,5 +25,3 @@ export default class Tool {
     this.canvas.onmouseup = null;
   }
 }
-
-

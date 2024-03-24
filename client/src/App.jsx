@@ -8,10 +8,7 @@ const App = () => {
       <div className="app">
         <Routes>
           <Route path="/:id" element={<Board />} />
-          <Route
-            path="*"
-            element={<Navigate to={`${(+new Date()).toString(16)}`} replace />}
-          />
+          <Route path="*" element={<Navigate to={`${(+new Date()).toString(16)}`} replace />} />
         </Routes>
       </div>
     </BrowserRouter>

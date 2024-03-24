@@ -41,27 +41,14 @@ const Canvas = observer(() => {
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
     let ctx = canvasRef.current.getContext("2d");
-    axios
-      .get(`http://localhost:5000/image?id=${params.id}`)
-      .then((response) => {
-        const img = new Image();
-        img.src = response.data;
-        img.onload = () => {
-          ctx.clearRect(
-            0,
-            0,
-            canvasRef.current.width,
-            canvasRef.current.height
-          );
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            canvasRef.current.width,
-            canvasRef.current.height
-          );
-        };
-      });
+    axios.get(`http://localhost:5000/image?id=${params.id}`).then((response) => {
+      const img = new Image();
+      img.src = response.data;
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      };
+    });
   }, []);
 
   useEffect(() => {
@@ -133,11 +120,7 @@ const Canvas = observer(() => {
 
   return (
     <div className="canvas">
-      <Modal
-        open={isModalOpen}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={isModalOpen} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={{ ...styles.modalBox, width: 400 }}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Enter your username

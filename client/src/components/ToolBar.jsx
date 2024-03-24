@@ -14,13 +14,13 @@ const ToolBar = observer(() => {
 
   return (
     <div className="tool-bar">
-      <button className="tool-bar__btn brush" onClick={() => toolState.setTool(new Brush(canvasState.canvas))}/>
-      <button className="tool-bar__btn rect" onClick={() => toolState.setTool(new Rect(canvasState.canvas))}/>
-      <button className="tool-bar__btn circle" onClick={() => toolState.setTool(new Circle(canvasState.canvas))}/>
-      <button className="tool-bar__btn eraser" onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}/>
-      <button className="tool-bar__btn line" onClick={() => toolState.setTool(new Line(canvasState.canvas))}/>
+      <button className="tool-bar__btn brush" onClick={() => toolState.setTool(new Brush(canvasState.canvas))} />
+      <button className="tool-bar__btn rect" onClick={() => toolState.setTool(new Rect(canvasState.canvas))} />
+      <button className="tool-bar__btn circle" onClick={() => toolState.setTool(new Circle(canvasState.canvas))} />
+      <button className="tool-bar__btn eraser" onClick={() => toolState.setTool(new Eraser(canvasState.canvas))} />
+      <button className="tool-bar__btn line" onClick={() => toolState.setTool(new Line(canvasState.canvas))} />
       <button className="tool-bar__btn undo" onClick={() => canvasState.undo()} />
-      <button className="tool-bar__btn redo" onClick={() => canvasState.redo()}/>
+      <button className="tool-bar__btn redo" onClick={() => canvasState.redo()} />
       <button className="tool-bar__btn save" />
     </div>
   );
