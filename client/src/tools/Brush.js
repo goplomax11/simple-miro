@@ -48,7 +48,6 @@ export default class Brush extends Tool {
           },
         })
       );
-      // this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop);
     }
   }
 

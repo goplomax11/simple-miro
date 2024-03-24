@@ -10,6 +10,7 @@ import Eraser from "../tools/Eraser";
 import Line from "../tools/Line";
 
 const ToolBar = observer(() => {
+  // console.log(canvasState.canvas.toDataURL())
 
   return (
     <div className="tool-bar">

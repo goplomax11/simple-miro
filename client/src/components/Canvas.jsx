@@ -10,19 +10,26 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Input } from "@mui/material";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
+const styles = {
+  modalBox: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+  },
+  inputWrapper: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
 };
 
 const Canvas = observer(() => {
@@ -33,35 +40,58 @@ const Canvas = observer(() => {
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
+    let ctx = canvasRef.current.getContext("2d");
+    axios
+      .get(`http://localhost:5000/image?id=${params.id}`)
+      .then((response) => {
+        const img = new Image();
+        img.src = response.data;
+        img.onload = () => {
+          ctx.clearRect(
+            0,
+            0,
+            canvasRef.current.width,
+            canvasRef.current.height
+          );
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            canvasRef.current.width,
+            canvasRef.current.height
+          );
+        };
+      });
   }, []);
 
   useEffect(() => {
-    console.log(canvasState.username)
-    if(canvasState.username) {
+    if (canvasState.username) {
       const socket = new WebSocket("ws://localhost:5000/");
       canvasState.setSocket(socket);
-      canvasState.setSessionId(params.id)
+      canvasState.setSessionId(params.id);
       toolState.setTool(new Brush(canvasState.canvas, socket, params.id));
       socket.onopen = () => {
         console.log("Connected");
-        socket.send(JSON.stringify({
-          id: params.id,
-          username: canvasState.username,
-          method: "connection"
-        }))
-      }
+        socket.send(
+          JSON.stringify({
+            id: params.id,
+            username: canvasState.username,
+            method: "connection",
+          })
+        );
+      };
 
       socket.onmessage = (event) => {
         let msg = JSON.parse(event.data);
         switch (msg.method) {
           case "connection":
-            console.log(`User ${msg.username} connected`)
-            break
+            console.log(`User ${msg.username} connected`);
+            break;
           case "draw":
             drawHandler(msg);
-            break
+            break;
         }
-      }
+      };
     }
   }, [canvasState.username]);
 
@@ -69,26 +99,34 @@ const Canvas = observer(() => {
     const figure = msg.figure;
     const ctx = canvasRef.current.getContext("2d");
     console.log(figure);
-    console.log(ctx)
+    console.log(ctx);
     switch (figure.type) {
       case "brush":
-        Brush.draw(ctx, figure.x, figure.y)
+        Brush.draw(ctx, figure.x, figure.y);
         break;
-        case "finish":
-          ctx.beginPath();
-          break;
-    
+      case "finish":
+        ctx.beginPath();
+        break;
+
       default:
         break;
     }
-  }
+  };
 
   const mouseDownHandler = () => {
     canvasState.pushToUndo(canvasRef.current.toDataURL());
   };
 
+  const mouseUpHandler = () => {
+    axios
+      .post(`http://localhost:5000/image?id=${params.id}`, {
+        img: canvasRef.current.toDataURL(),
+      })
+      .then((response) => console.log(response.data))
+      .catch((e) => console.log(e));
+  };
+
   const connectHandler = () => {
-    console.log(inputRef)
     canvasState.setUsername(inputRef.current.value);
     setIsModalOpen(false);
   };
@@ -100,16 +138,21 @@ const Canvas = observer(() => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...style, width: 400 }}>
+        <Box sx={{ ...styles.modalBox, width: 400 }}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Enter your username
           </Typography>
-          <Input  inputProps={{ref:inputRef}} placeholder="Username..." />
-          <Button onClick={connectHandler}>Sigh-in</Button>
+          <Box sx={{ ...styles.inputWrapper }}>
+            <Input inputProps={{ ref: inputRef }} placeholder="Username..." />
+            <Button variant="contained" onClick={connectHandler}>
+              Sigh-in
+            </Button>
+          </Box>
         </Box>
       </Modal>
       <canvas
         onMouseDown={mouseDownHandler}
+        onMouseUp={mouseUpHandler}
         ref={canvasRef}
         height={600}
         width={800}
